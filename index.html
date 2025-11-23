@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טופס הסכמת הורים לטיפול באמצעות אמנויות</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .ministry-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-right: 4px solid #667eea;
+        }
+
+        .ministry-info p {
+            color: #555;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="date"]:focus,
+        input[type="tel"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input[readonly] {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .consent-text {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .signature-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .signature-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .signature-container {
+            position: relative;
+        }
+
+        .signature-pad {
+            border: 3px solid #667eea;
+            border-radius: 8px;
+            background: white;
+            cursor: crosshair;
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+            height: 200px;
+        }
+
+        .signature-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-clear {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: #c82333;
+        }
+
+        .btn-submit {
+            background: #667eea;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .parent-section {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-right: 4px solid #2196f3;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+        }
+
+        .success-message h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>טופס הסכמת הורים למתן טיפול באמצעות אמנויות</h1>
+            <p>משרד החינוך | המנהל הפדגוגי | אגף א' לחינוך מיוחד</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <h3>✅ הטופס נשלח בהצלחה!</h3>
+            <p>קיבלנו את הטופס החתום שלכם. תודה רבה!</p>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            ❌ <strong>אירעה שגיאה בשליחת הטופס.</strong><br>
+            אנא בדקו את החיבור לאינטרנט ונסו שנית.
+        </div>
+
+        <form id="consentForm">
+            <div class="form-group">
+                <label>תאריך <span class="required">*</span></label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <div class="ministry-info">
+                <p><strong>לכבוד</strong></p>
+                <p>מנהל/ת המסגרת החינוכית</p>
+            </div>
+
+            <div class="form-group">
+                <label>שם המנהלת</label>
+                <input type="text" id="principalName" name="principalName" value="מיכל פלג" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>שם המסגרת</label>
+                <input type="text" id="institutionName" name="institutionName" value="עירוני כט ראשית בנות" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>שם התלמיד/ה <span class="required">*</span></label>
+                <input type="text" id="studentName" name="studentName" required>
+            </div>
+
+            <div class="form-group">
+                <label>תעודת זהות התלמיד/ה <span class="required">*</span></label>
+                <input type="text" id="studentId" name="studentId" pattern="[0-9]{9}" maxlength="9" required>
+            </div>
+
+            <div class="form-group">
+                <label>שם המטפל/ת באמצעות אמנויות</label>
+                <input type="text" id="therapistName" name="therapistName" value="ג'ייד רזא" readonly>
+            </div>
+
+            <div class="consent-text">
+                <p><strong>אנו מאשרים בזאת</strong> שבננו/בתנו יקבל/תקבל טיפול באמצעות אמנויות, כחלק ממערכת לימודיו/ה במסגרת החינוכית שלעיל. הטיפול באמצעות אמנויות הנו טיפול רגשי הניתן במהלך שנת הלימודים ומהווה חלק מהתכנית החינוכית-טיפולית הכוללת של התלמיד/ה.</p>
+                <br>
+                <p>כדי לאפשר לבננו/בתנו לקבל טיפול באמצעות אמנויות ולצוות החינוכי-טיפולי לבנות עבורו/ה תכנית טיפולית אישית, אנו מסכימים למסירה ולקבלה של מידע בין אנשי הצוות החינוכי-טיפולי ובכללם פסיכולוג/ית המסגרת החינוכית מהשרות הפסיכולוגי חינוכי-ייעוצי והמטפל/ת באמצעות אמנויות.</p>
+            </div>
+
+            <div class="parent-section">
+                <h3>פרטי הורה</h3>
+                
+                <div class="form-group">
+                    <label>שם ההורה <span class="required">*</span></label>
+                    <input type="text" id="parentName" name="parentName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>תעודת זהות <span class="required">*</span></label>
+                    <input type="text" id="parentId" name="parentId" pattern="[0-9]{9}" maxlength="9" required>
+                </div>
+
+                <div class="form-group">
+                    <label>אימייל <span class="required">*</span></label>
+                    <input type="email" id="parentEmail" name="parentEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label>טלפון (אופציונלי)</label>
+                    <input type="tel" id="parentPhone" name="parentPhone" placeholder="050-1234567">
+                </div>
+
+                <div class="signature-section">
+                    <h3>חתימה דיגיטלית <span class="required">*</span></h3>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 10px;">אנא חתמו בתיבה למטה עם העכבר או האצבע</p>
+                    <div class="signature-container">
+                        <canvas id="signatureCanvas" class="signature-pad"></canvas>
+                    </div>
+                    <div class="signature-buttons">
+                        <button type="button" class="btn btn-clear" id="clearButton">נקה חתימה</button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-submit" id="submitBtn">שלח טופס</button>
+        </form>
+    </div>
+
+    <script>
+        // Initialize EmailJS with your actual public key
+        (function() {
+            emailjs.init("N8QHehAu75Bq4bXnh");
+        })();
+
+        // Set canvas size properly
+        const canvas = document.getElementById('signatureCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        let isDrawing = false;
+        let hasSigned = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        function getCoordinates(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            if (e.touches && e.touches.length > 0) {
+                return {
+                    x: (e.touches[0].clientX - rect.left) * scaleX,
+                    y: (e.touches[0].clientY - rect.top) * scaleY
+                };
+            }
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        function startDrawing(e) {
+            e.preventDefault();
+            isDrawing = true;
+            hasSigned = true;
+            const coords = getCoordinates(e);
+            lastX = coords.x;
+            lastY = coords.y;
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            
+            const coords = getCoordinates(e);
+            
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(coords.x, coords.y);
+            ctx.stroke();
+            
+            lastX = coords.x;
+            lastY = coords.y;
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        // Mouse events
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        // Touch events
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        // Clear button
+        document.getElementById('clearButton').addEventListener('click', function() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hasSigned = false;
+        });
+
+        // Set today's date
+        document.getElementById('date').valueAsDate = new Date();
+
+        // Form submission
+        document.getElementById('consentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!hasSigned) {
+                alert('נא לחתום לפני שליחת הטופס');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            // Hide previous messages
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'שולח...';
+
+            // Get signature as base64
+            const signatureData = canvas.toDataURL('image/png');
+
+            // Prepare template parameters
+            const templateParams = {
+                to_email: 'edenmiz00@gmail.com',
+                date: document.getElementById('date').value,
+                principal_name: document.getElementById('principalName').value,
+                institution_name: document.getElementById('institutionName').value,
+                student_name: document.getElementById('studentName').value,
+                student_id: document.getElementById('studentId').value,
+                therapist_name: document.getElementById('therapistName').value,
+                parent_name: document.getElementById('parentName').value,
+                parent_id: document.getElementById('parentId').value,
+                parent_email: document.getElementById('parentEmail').value,
+                parent_phone: document.getElementById('parentPhone').value || 'לא צוין',
+                signature_image: signatureData
+            };
+
+            try {
+                // Send email using EmailJS
+                const response = await emailjs.send(
+                    'service_3xo0h2k',
+                    'template_s19zeq4',
+                    templateParams
+                );
+
+                console.log('SUCCESS!', response.status, response.text);
+                
+                // Show success message
+                successMsg.style.display = 'block';
+                
+                // Reset form
+                document.getElementById('consentForm').reset();
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                hasSigned = false;
+                document.getElementById('date').valueAsDate = new Date();
+                
+                // Scroll to top
+                window.scrollTo({top: 0, behavior: 'smooth'});
+                
+            } catch (error) {
+                console.error('FAILED...', error);
+                errorMsg.style.display = 'block';
+                errorMsg.innerHTML = '❌ <strong>אירעה שגיאה בשליחת הטופס.</strong><br>' + error.text;
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'שלח טופס';
+            }
+        });
+    </script>
+</body>
+</html>
