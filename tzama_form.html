@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אישור הורים - מופע צמאה</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .letter-content {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .letter-content h2 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .letter-content p {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .letter-content strong {
+            color: #764ba2;
+        }
+
+        .highlight-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .highlight-box p {
+            margin: 5px 0;
+            font-weight: 600;
+        }
+
+        .form-section {
+            background: #e8eaf6;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border-right: 4px solid #667eea;
+        }
+
+        .form-section h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="tel"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="date"]:focus,
+        input[type="tel"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .radio-group {
+            margin: 20px 0;
+        }
+
+        .radio-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .radio-option:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-left: 10px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            cursor: pointer;
+            margin-bottom: 0;
+            display: inline;
+        }
+
+        .radio-option.selected {
+            border-color: #667eea;
+            background: #e8eaf6;
+        }
+
+        .conditional-field {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #fff3cd;
+            border-radius: 8px;
+        }
+
+        .conditional-field.show {
+            display: block;
+        }
+
+        .signature-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .signature-section h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .signature-pad {
+            border: 3px solid #667eea;
+            border-radius: 8px;
+            background: white;
+            cursor: crosshair;
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+            height: 150px;
+        }
+
+        .signature-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-clear {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: #c82333;
+        }
+
+        .btn-submit {
+            background: #667eea;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+        }
+
+        .success-message h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .footer-contact {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .footer-contact p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🕎 מופע חנוכה "צמאה" - אישור הורים</h1>
+            <p>בס״ד כסלו תשפ״ה</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <h3>✅ הטופס נשלח בהצלחה!</h3>
+            <p>קיבלנו את אישורכם. תודה רבה!</p>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            ❌ <strong>אירעה שגיאה בשליחת הטופס.</strong><br>
+            אנא בדקו את החיבור לאינטרנט ונסו שנית.
+        </div>
+
+        <div class="letter-content">
+            <h2>לכבוד הורי בנות כיתות ז׳-י״ב,</h2>
+            
+            <p>כהכנה לחג החנוכה, בעז״ה ביום רביעי, כ׳ כסלו (10.12.2025), תצאנה בנות בית הספר למופע ״צמאה״ בבניני האומה בירושלים. <strong>בתכנית: תחנות ופעילויות בנושא יהדות, הופעה מוזיקלית ״צמאה״.</strong></p>
+
+            <div class="highlight-box">
+                <p>⏰ <strong>יציאה בשעה 08:15</strong> מבית הספר</p>
+                <p>⏰ <strong>סיום וחזרה משוערת</strong> לבית הספר בשעה 17:00</p>
+            </div>
+
+            <p><strong>📝 הרשמה במזכירות</strong> תחת תשלומי הורים בעלות <strong>80 ש״ח</strong> עד לתאריך <strong>4.12</strong>.</p>
+
+            <p><strong>🎒 ציוד חובה:</strong> נעלי הליכה סגורות, מים, ארוחת בוקר וצהריים, אישור הורים.</p>
+
+            <p style="color: #dc3545; font-weight: bold;">⚠️ נדגיש כי ללא ציוד לא תוכל הבת לצאת.</p>
+
+            <p style="margin-top: 20px;"><strong>בברכה,<br>הצוות החברתי וההנהלה.</strong></p>
+        </div>
+
+        <form id="tzamaForm">
+            <div class="form-section">
+                <h3>📋 אישור הורים</h3>
+
+                <div class="form-group">
+                    <label>תאריך <span class="required">*</span></label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>שם הבת <span class="required">*</span></label>
+                    <input type="text" id="studentName" name="studentName" required placeholder="שם מלא">
+                </div>
+
+                <div class="form-group">
+                    <label>כיתה <span class="required">*</span></label>
+                    <input type="text" id="studentClass" name="studentClass" required placeholder="למשל: ט'2">
+                </div>
+
+                <p style="margin: 20px 0; font-weight: 600; color: #333;">
+                    הריני מאשר/ת לבתי להשתתף במופע צמאה בירושלים ביום רביעי, כ׳ כסלו (10.12.2025).
+                </p>
+
+                <div class="radio-group">
+                    <div class="radio-option" id="option1">
+                        <input type="radio" id="noIssues" name="healthStatus" value="no_issues" required>
+                        <label for="noIssues">✅ אין לבתי בעיות בריאותיות המונעות את השתתפותה בפעילות זו</label>
+                    </div>
+
+                    <div class="radio-option" id="option2">
+                        <input type="radio" id="hasIssues" name="healthStatus" value="has_issues" required>
+                        <label for="hasIssues">⚠️ יש לבתי מגבלה בריאותית</label>
+                        
+                        <div class="conditional-field" id="detailsField">
+                            <label for="healthDetails">פירוט המגבלה הבריאותית <span class="required">*</span></label>
+                            <textarea id="healthDetails" name="healthDetails" placeholder="אנא פרטו את המגבלה הבריאותית..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>שם ההורה <span class="required">*</span></label>
+                    <input type="text" id="parentName" name="parentName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>אימייל <span class="required">*</span></label>
+                    <input type="email" id="parentEmail" name="parentEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label>טלפון (אופציונלי)</label>
+                    <input type="tel" id="parentPhone" name="parentPhone" placeholder="050-1234567">
+                </div>
+
+                <div class="signature-section">
+                    <h4>חתימה דיגיטלית <span class="required">*</span></h4>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 10px;">אנא חתמו בתיבה למטה עם העכבר או האצבע</p>
+                    <canvas id="signatureCanvas" class="signature-pad"></canvas>
+                    <div class="signature-buttons">
+                        <button type="button" class="btn btn-clear" id="clearButton">נקה חתימה</button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-submit" id="submitBtn">שלח אישור</button>
+        </form>
+
+        <div class="footer-contact">
+            <p>📍 יגאל אלון 30, תל אביב - הדקל הרשמי</p>
+            <p>📞 03-7937044</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize EmailJS
+        (function() {
+            emailjs.init("N8QHehAu75Bq4bXnh");
+        })();
+
+        // Radio button styling and conditional field
+        const radioOptions = document.querySelectorAll('.radio-option');
+        const hasIssuesRadio = document.getElementById('hasIssues');
+        const detailsField = document.getElementById('detailsField');
+        const healthDetailsTextarea = document.getElementById('healthDetails');
+
+        radioOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+                
+                radioOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+
+                // Show/hide conditional field
+                if (radio.id === 'hasIssues') {
+                    detailsField.classList.add('show');
+                    healthDetailsTextarea.required = true;
+                } else {
+                    detailsField.classList.remove('show');
+                    healthDetailsTextarea.required = false;
+                    healthDetailsTextarea.value = '';
+                }
+            });
+        });
+
+        // Canvas setup
+        const canvas = document.getElementById('signatureCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        let isDrawing = false;
+        let hasSigned = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        function getCoordinates(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            if (e.touches && e.touches.length > 0) {
+                return {
+                    x: (e.touches[0].clientX - rect.left) * scaleX,
+                    y: (e.touches[0].clientY - rect.top) * scaleY
+                };
+            }
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        function startDrawing(e) {
+            e.preventDefault();
+            isDrawing = true;
+            hasSigned = true;
+            const coords = getCoordinates(e);
+            lastX = coords.x;
+            lastY = coords.y;
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            
+            const coords = getCoordinates(e);
+            
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(coords.x, coords.y);
+            ctx.stroke();
+            
+            lastX = coords.x;
+            lastY = coords.y;
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        // Mouse events
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        // Touch events
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        // Clear button
+        document.getElementById('clearButton').addEventListener('click', function() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hasSigned = false;
+        });
+
+        // Set today's date
+        document.getElementById('date').valueAsDate = new Date();
+
+        // Form submission
+        document.getElementById('tzamaForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!hasSigned) {
+                alert('נא לחתום לפני שליחת הטופס');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'שולח...';
+
+            const signatureData = canvas.toDataURL('image/png');
+            const healthStatus = document.querySelector('input[name="healthStatus"]:checked').value;
+            const healthDetails = healthStatus === 'has_issues' ? document.getElementById('healthDetails').value : 'אין מגבלות בריאותיות';
+
+            const templateParams = {
+                to_email: 'edenmiz00@gmail.com',
+                form_type: 'מופע צמאה - חנוכה תשפ״ה',
+                date: document.getElementById('date').value,
+                event_date: '10.12.2025',
+                event_name: 'מופע צמאה בבניני האומה בירושלים',
+                principal_name: 'מיכל פלג',
+                institution_name: 'עירוני כט ראשית בנות',
+                student_name: document.getElementById('studentName').value,
+                student_class: document.getElementById('studentClass').value,
+                health_status: healthStatus === 'no_issues' ? 'אין בעיות בריאותיות' : 'יש מגבלה בריאותית',
+                health_details: healthDetails,
+                parent_name: document.getElementById('parentName').value,
+                parent_email: document.getElementById('parentEmail').value,
+                parent_phone: document.getElementById('parentPhone').value || 'לא צוין',
+                signature_image: signatureData
+            };
+
+            try {
+                const response = await emailjs.send(
+                    'service_3xo0h2k',
+                    'template_s19zeq4',
+                    templateParams
+                );
+
+                console.log('SUCCESS!', response.status, response.text);
+                
+                successMsg.style.display = 'block';
+                document.getElementById('tzamaForm').reset();
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                hasSigned = false;
+                radioOptions.forEach(opt => opt.classList.remove('selected'));
+                detailsField.classList.remove('show');
+                document.getElementById('date').valueAsDate = new Date();
+                window.scrollTo({top: 0, behavior: 'smooth'});
+                
+            } catch (error) {
+                console.error('FAILED...', error);
+                errorMsg.style.display = 'block';
+                errorMsg.innerHTML = '❌ <strong>אירעה שגיאה בשליחת הטופס.</strong><br>' + error.text;
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'שלח אישור';
+            }
+        });
+    </script>
+</body>
+</html>
