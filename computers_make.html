@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הזמנת מחשבים - ראשית בנות</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .instructions {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .instructions h3 {
+            color: #856404;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .instructions ul {
+            margin-right: 20px;
+            line-height: 1.8;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .instructions .important {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #721c24;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        select {
+            cursor: pointer;
+            background: white;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .btn-submit {
+            background: #667eea;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+        }
+
+        .success-message h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .warning-message {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💻 הזמנת מחשבים לשיעור</h1>
+            <p>עירוני כ״ט ראשית בנות</p>
+        </div>
+
+        <div class="instructions">
+            <h3>⚠️ הוראות חשובות:</h3>
+            <ul>
+                <li>📋 בחרו את היום, השעה והכיתה מהרשימה הנפתחת</li>
+                <li>💻 סה״כ ישנם <strong>23 מחשבים</strong> זמינים</li>
+                <li>📦 את המחשבים יש לקחת מהארון</li>
+                <li>🔌 <strong>חשוב מאוד!</strong> בתום השימוש יש להחזיר את המחשבים לארון ולחבר למטען</li>
+            </ul>
+            <div class="important">
+                ⚡ אי החזרת המחשבים למטען תגרום לאי זמינות במהלך השיעורים הבאים!
+            </div>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <h3>✅ ההזמנה נשמרה בהצלחה!</h3>
+            <p>המחשבים שמורים עבורך.</p>
+        </div>
+
+        <div class="warning-message" id="warningMessage"></div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <form id="computerForm">
+            <div class="form-group">
+                <label>שם המורה <span class="required">*</span></label>
+                <input type="text" id="teacherName" name="teacherName" required placeholder="שם מלא">
+            </div>
+
+            <div class="form-group">
+                <label>יום <span class="required">*</span></label>
+                <input type="date" id="lessonDate" name="lessonDate" required>
+            </div>
+
+            <div class="form-group">
+                <label>שעה <span class="required">*</span></label>
+                <select id="lessonTime" name="lessonTime" required>
+                    <option value="">בחרו שעה</option>
+                    <option value="08:30-09:15 - שיעור ראשון">שיעור ראשון - 08:30-09:15</option>
+                    <option value="09:15-10:00 - שיעור שני">שיעור שני - 09:15-10:00</option>
+                    <option value="10:20-11:05 - שיעור שלישי">שיעור שלישי - 10:20-11:05</option>
+                    <option value="11:05-11:50 - שיעור רביעי">שיעור רביעי - 11:05-11:50</option>
+                    <option value="12:05-12:50 - שיעור חמישי">שיעור חמישי - 12:05-12:50</option>
+                    <option value="12:50-13:35 - שיעור שישי">שיעור שישי - 12:50-13:35</option>
+                    <option value="13:55-14:35 - שיעור שביעי">שיעור שביעי - 13:55-14:35</option>
+                    <option value="14:35-15:15 - שיעור שמיני">שיעור שמיני - 14:35-15:15</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>כיתה <span class="required">*</span></label>
+                <select id="className" name="className" required>
+                    <option value="">בחרו כיתה</option>
+                    <option value="ז-1">ז-1</option>
+                    <option value="ז-2">ז-2</option>
+                    <option value="ח-1">ח-1</option>
+                    <option value="ח-2">ח-2</option>
+                    <option value="ט-1">ט-1</option>
+                    <option value="ט-2">ט-2</option>
+                    <option value="י">י</option>
+                    <option value="יא">יא</option>
+                    <option value="יב">יב</option>
+                    <option value="אורי">אורי</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>כמות מחשבים <span class="required">*</span></label>
+                <select id="computerCount" name="computerCount" required>
+                    <option value="">בחרו כמות</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>הערות (אופציונלי)</label>
+                <textarea id="notes" name="notes" placeholder="הוסיפו הערות במידת הצורך..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">שמור הזמנה</button>
+        </form>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = 'https://hook.eu1.make.com/m2yt5cbpdl118dm3uz4nbzcjekc52g44';
+
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('lessonDate').setAttribute('min', today);
+
+        // Form submission
+        document.getElementById('computerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            const warningMsg = document.getElementById('warningMessage');
+
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            warningMsg.style.display = 'none';
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'בודק זמינות...';
+
+            const formData = {
+                booking_date: new Date().toLocaleDateString('he-IL'),
+                teacher_name: document.getElementById('teacherName').value,
+                lesson_date: document.getElementById('lessonDate').value,
+                lesson_time: document.getElementById('lessonTime').value,
+                class_name: document.getElementById('className').value,
+                computer_count: parseInt(document.getElementById('computerCount').value),
+                notes: document.getElementById('notes').value || ''
+            };
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    successMsg.style.display = 'block';
+                    document.getElementById('computerForm').reset();
+                    document.getElementById('lessonDate').setAttribute('min', today);
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                } else if (result.warning) {
+                    warningMsg.innerHTML = `⚠️ <strong>שימו לב:</strong> ${result.message}`;
+                    warningMsg.style.display = 'block';
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                } else {
+                    errorMsg.innerHTML = `❌ <strong>שגיאה:</strong> ${result.message || 'לא ניתן לבצע את ההזמנה'}`;
+                    errorMsg.style.display = 'block';
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMsg.innerHTML = '❌ <strong>שגיאה:</strong> אירעה שגיאה בשליחת ההזמנה. אנא נסו שנית.';
+                errorMsg.style.display = 'block';
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'שמור הזמנה';
+        });
+    </script>
+</body>
+</html>
